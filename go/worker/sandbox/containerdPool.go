@@ -189,8 +189,8 @@ func (pool *ContainerdPool) Create(parent Sandbox, isLeaf bool, codeDir, scratch
                         // Use host network namespace for internet access (needed for pip install)
                         // Note: Containerd has no network by default, unlike Docker's bridge network
                         oci.WithHostNamespace(specs.NetworkNamespace),
-                        // oci.WithHostHostsFile,
-                        // oci.WithHostResolvconf,
+                        oci.WithHostHostsFile,
+                        oci.WithHostResolvconf,
                         // *** END OF NEW CODE ***
                         // ============================================================================
                         // END FIX #2
