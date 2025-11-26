@@ -182,21 +182,10 @@ func (pool *ContainerdPool) Create(parent Sandbox, isLeaf bool, codeDir, scratch
                         oci.WithMemoryLimit(memoryBytes),
                         oci.WithPidsLimit(pidsLimit),
                         oci.WithCPUCFS(cpuQuota, cpuPeriod),
-                        // ============================================================================
-                        // FIX #2: NETWORK CONFIGURATION FOR CONTAINERD
-                        // ============================================================================
-                        // *** START OF NEW CODE ***
-                        // Use host network namespace for internet access (needed for pip install)
-                        // Note: Containerd has no network by default, unlike Docker's bridge network
+                        // network
                         oci.WithHostNamespace(specs.NetworkNamespace),
                         oci.WithHostHostsFile,
-                        oci.WithHostResolvconf,
-                        // *** END OF NEW CODE ***
-                        // ============================================================================
-                        // END FIX #2
-                        // ============================================================================
-                        // NoNewPrivileges prevents privilege escalation via setuid/setgid binaries.
-                        // See: https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
+                        oci.WithHostResolvconf, // for "/etc/resolv.conf"
                         oci.WithNoNewPrivileges,
                 ),
         )
