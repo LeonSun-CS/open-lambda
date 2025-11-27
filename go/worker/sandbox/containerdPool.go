@@ -176,7 +176,7 @@ func (pool *ContainerdPool) Create(parent Sandbox, isLeaf bool, codeDir, scratch
                 containerd.WithRuntime(pool.runtime, nil),
                 containerd.WithContainerLabels(pool.labels),
                 containerd.WithNewSpec(
-                        oci.WithImageConfig(pool.imageRef), // imports CMD, env, workingDir, user; todo: delete after tested without error
+                        // oci.WithImageConfig(pool.imageRef), // imports CMD, env, workingDir, user; todo: delete after tested without error
                         oci.WithProcessArgs("/spin"),
                         oci.WithMounts(mounts),
                         oci.WithMemoryLimit(memoryBytes),
@@ -194,7 +194,7 @@ func (pool *ContainerdPool) Create(parent Sandbox, isLeaf bool, codeDir, scratch
         }
 
         // a task is the actual running process, while a container is just metadata
-        task, err = container.NewTask(ctx, cio.NewCreator(cio.WithStdio))
+        task, err = container.NewTask(ctx, cio.NullIO)
         if err != nil {
                 return nil, fmt.Errorf("failed to create task for container %q: %w", id, err)
         }
@@ -231,7 +231,7 @@ func (pool *ContainerdPool) Create(parent Sandbox, isLeaf bool, codeDir, scratch
                         Env:             env,
                         NoNewPrivileges: true,
                 },
-                cio.NewCreator(cio.WithStdio),  // Problem: WithStdio loses all output
+                cio.NullIO,  
         )
 
         if err != nil {
