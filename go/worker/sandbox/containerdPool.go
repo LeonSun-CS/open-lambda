@@ -204,7 +204,7 @@ func (pool *ContainerdPool) Create(parent Sandbox, isLeaf bool, codeDir, scratch
         }
 
         // Launch the Python lambda server as an exec process (not PID 1).
-        cmd := []string{"python3", "/runtimes/python/server_legacy.py"}
+        cmd := []string{"/usr/bin/python3", "/runtimes/python/server_legacy.py"}
 
         spec, err := container.Spec(ctx)
         if err != nil {
